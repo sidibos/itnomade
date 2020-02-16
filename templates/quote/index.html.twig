@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quote index{% endblock %}
+
+{% block body %}
+    <h1>Quote index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Created_at</th>
+                <th>Status</th>
+                <th>Price</th>
+                <th>Send_to_user</th>
+                <th>Approved_by_user</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for quote in quotes %}
+            <tr>
+                <td>{{ quote.id }}</td>
+                <td>{{ quote.title }}</td>
+                <td>{{ quote.description }}</td>
+                <td>{{ quote.createdAt ? quote.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ quote.status }}</td>
+                <td>{{ quote.price }}</td>
+                <td>{{ quote.sendToUser ? quote.sendToUser|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ quote.approvedByUser ? quote.approvedByUser|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('quote_show', {'id': quote.id}) }}">show</a>
+                    <a href="{{ path('quote_edit', {'id': quote.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('quote_new') }}">Create new</a>
+{% endblock %}

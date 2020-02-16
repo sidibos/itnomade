@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quote{% endblock %}
+
+{% block body %}
+    <h1>Quote</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ quote.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ quote.title }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ quote.description }}</td>
+            </tr>
+            <tr>
+                <th>Created_at</th>
+                <td>{{ quote.createdAt ? quote.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ quote.status }}</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>{{ quote.price }}</td>
+            </tr>
+            <tr>
+                <th>Send_to_user</th>
+                <td>{{ quote.sendToUser ? quote.sendToUser|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Approved_by_user</th>
+                <td>{{ quote.approvedByUser ? quote.approvedByUser|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('quote_index') }}">back to list</a>
+
+    <a href="{{ path('quote_edit', {'id': quote.id}) }}">edit</a>
+
+    {{ include('quote/_delete_form.html.twig') }}
+{% endblock %}
