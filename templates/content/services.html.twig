@@ -3,16 +3,62 @@
 {% block title %}Hello ContentController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello ✅</h1>
+<section id="services" class="section-bg" style="margin-top: 30px;">
+    <div class="container">
+        <header class="section-header">
+            <h3>Services</h3>
+            <p>We provide different services, as listed below:</p>
+        </header>
+        <div class="row">
+            <div class="col-md-6 col-lg-5 offset-lg-1 wow bounceInUp" data-wow-duration="1.4s">
+                <div class="box">
+                    <div class="icon"><i class="ion-ios-analytics-outline" style="color: #ff689b;"></i></div>
+                    <h4 class="title">Blogs</h4>
+                    <p class="description">If you want to build a simple blog for yourself or your business</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-5 offset-lg-1 wow bounceInUp" data-wow-duration="1.4s">
+                <div class="box">
+                    <div class="icon"><i class="ion-ios-analytics-outline" style="color: #ff689b;"></i></div>
+                    <h4 class="title">Ecommerce</h4>
+                    <p class="description">We can build a reliable and safe Ecommerce for your business</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-lg-5 offset-lg-1 wow bounceInUp" data-wow-duration="1.4s">
+                <div class="box">
+                    <div class="icon"><i class="ion-ios-analytics-outline" style="color: #ff689b;"></i></div>
+                    <h4 class="title">API services</h4>
+                    <p class="description">We can built a high standard API service for you at a good price</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-5 offset-lg-1 wow bounceInUp" data-wow-duration="1.4s">
+                <div class="box">
+                    <div class="icon"><i class="ion-ios-analytics-outline" style="color: #ff689b;"></i></div>
+                    <h4 class="title">Hosting your Application</h4>
+                    <p class="description">We can host your application on a cloud server, e.g AWS.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-lg-5 offset-lg-1 wow bounceInUp" data-wow-duration="1.4s">
+                <div class="box">
+                    <div class="icon"><i class="ion-ios-analytics-outline" style="color: #ff689b;"></i></div>
+                    <h4 class="title">System Architecture</h4>
+                    <p class="description">We can provide expert Architecture for your application</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-5 offset-lg-1 wow bounceInUp" data-wow-duration="1.4s">
+                <div class="box">
+                    <div class="icon"><i class="ion-ios-analytics-outline" style="color: #ff689b;"></i></div>
+                    <h4 class="title">Many more ...</h4>
+                    <p class="description">Please request a quote.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <p>
-        {{ services }}
-    </p>
-</div>
 {% endblock %}

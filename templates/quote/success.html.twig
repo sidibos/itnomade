@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quote Success{% endblock %}
+
+{% block body %}
+<section id="about" style="margin-top:30px;">
+    <div class="container">
+        <header class="section-header">
+            <h3>Thank you for sending a Quote!</h3>
+            <div class="alert alert-success" role="alert">
+                We have received your quote, and will contact you shortly at your email: {{ email }}
+            </div>
+        </header>
+    </div>
+</section>
+{% endblock %}

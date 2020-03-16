@@ -13,25 +13,25 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class QuoteController extends AbstractController
 {
-    /**
-     * @Route("/quote/", name="quote_index", methods={"GET"})
-     */
-    public function index(QuoteRepository $quoteRepository): Response
-    {
-        return $this->render('quote/index.html.twig', [
-            'quotes' => $quoteRepository->findAll(),
-        ]);
-    }
+//    /**
+//     * @Route("/quote", name="quote_index", methods={"GET"})
+//     */
+//    public function index(QuoteRepository $quoteRepository): Response
+//    {
+//        return $this->render('quote/index.html.twig', [
+//            'quotes' => $quoteRepository->findAll(),
+//        ]);
+//    }
 
     /**
-     * @Route("/new-quote/", name="new_quote", methods={"GET","POST"})
+     * @Route("/new-quote", name="new_quote", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
         $quote      = new Quote();
         $formData   = $request->request->all();
-
-        if ($request->isMethod('POST')) {
+        $errorMsg   = null;
+        if ($request->isMethod('POST') && !($errorMsg   = $this->validateFormData($formData))) {
             $firstName      = $formData['firstName'] ?? null;
             $lastName       = $formData['lastName'] ?? null;
             $email          = $formData['emailAddress'] ?? null;
@@ -47,12 +47,24 @@ class QuoteController extends AbstractController
             $entityManager->persist($quote);
             $entityManager->flush();
 
-            return $this->redirectToRoute('quote_index');
+            return $this->redirectToRoute('quote_success', ['email' => $email]);
         }
 
         return $this->render('quote/new.html.twig', [
-            'quote' => $quote,
-            'form' => $formData,
+            'quote'     => $quote,
+            'errorMsg'  => $errorMsg,
+            'form'      => $formData,
+        ]);
+    }
+
+    /**
+     * @Route("/quote-success", name="quote_success", methods={"GET"})
+     */
+    public function quoteSuccess(Request $request)
+    {
+        $email = $request->query->get('email');
+        return $this->render('quote/success.html.twig',[
+            'email' => $email
         ]);
     }
 
@@ -66,37 +78,59 @@ class QuoteController extends AbstractController
         ]);
     }
 
+//    /**
+//     * @Route("/quote/{id}/edit", name="quote_edit", methods={"GET","POST"})
+//     */
+//    public function edit(Request $request, Quote $quote): Response
+//    {
+//        $form = $this->createForm(QuoteType::class, $quote);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $this->getDoctrine()->getManager()->flush();
+//
+//            return $this->redirectToRoute('quote_index');
+//        }
+//
+//        return $this->render('quote/edit.html.twig', [
+//            'quote' => $quote,
+//            'form' => $form->createView(),
+//        ]);
+//    }
+//
+//    /**
+//     * @Route("/quote/{id}", name="quote_delete", methods={"DELETE"})
+//     */
+//    public function delete(Request $request, Quote $quote): Response
+//    {
+//        if ($this->isCsrfTokenValid('delete'.$quote->getId(), $request->request->get('_token'))) {
+//            $entityManager = $this->getDoctrine()->getManager();
+//            $entityManager->remove($quote);
+//            $entityManager->flush();
+//        }
+//
+//        return $this->redirectToRoute('quote_index');
+//    }
+
     /**
-     * @Route("/quote/{id}/edit", name="quote_edit", methods={"GET","POST"})
+     * @param array $data
+     *
+     * @return null|string
      */
-    public function edit(Request $request, Quote $quote): Response
+    private function validateFormData(array $data): ?string
     {
-        $form = $this->createForm(QuoteType::class, $quote);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('quote_index');
+        $requiredFields = [
+            'emailAddress',
+            'firstName',
+            'company',
+            'subject',
+            'description'
+        ];
+        foreach($requiredFields as $requiredField) {
+            if (empty($data[$requiredField])) {
+                return "This field {$requiredField} is required!";
+            }
         }
-
-        return $this->render('quote/edit.html.twig', [
-            'quote' => $quote,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/quote/{id}", name="quote_delete", methods={"DELETE"})
-     */
-    public function delete(Request $request, Quote $quote): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$quote->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($quote);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('quote_index');
+        return null;
     }
 }
