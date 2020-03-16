@@ -42,7 +42,7 @@ class Quote
     private $price;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="quotes")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="quotes", cascade={"persist"})
      */
     private $user;
 

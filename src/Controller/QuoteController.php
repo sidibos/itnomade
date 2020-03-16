@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Quote;
+use App\Entity\User;
 use App\Form\QuoteType;
 use App\Repository\QuoteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,13 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/quote")
- */
 class QuoteController extends AbstractController
 {
     /**
-     * @Route("/", name="quote_index", methods={"GET"})
+     * @Route("/quote/", name="quote_index", methods={"GET"})
      */
     public function index(QuoteRepository $quoteRepository): Response
     {
@@ -26,15 +24,25 @@ class QuoteController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="quote_new", methods={"GET","POST"})
+     * @Route("/new-quote/", name="new_quote", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
-        $quote = new Quote();
-        $form = $this->createForm(QuoteType::class, $quote);
-        $form->handleRequest($request);
+        $quote      = new Quote();
+        $formData   = $request->request->all();
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($request->isMethod('POST')) {
+            $firstName      = $formData['firstName'] ?? null;
+            $lastName       = $formData['lastName'] ?? null;
+            $email          = $formData['emailAddress'] ?? null;
+
+            $subject        = $formData['subject'] ?? null;
+            $description    = $formData['description'] ?? null;
+
+            $user   = (new User())->setEmail($email)->setFirstName($firstName)->setLastName($lastName);
+            $quote  = (new Quote())->setTitle($subject)->setDescription($description)
+                ->setCreatedAt(new \DateTime('now'))->setStatus('pending')->setUser($user);
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($quote);
             $entityManager->flush();
@@ -44,12 +52,12 @@ class QuoteController extends AbstractController
 
         return $this->render('quote/new.html.twig', [
             'quote' => $quote,
-            'form' => $form->createView(),
+            'form' => $formData,
         ]);
     }
 
     /**
-     * @Route("/{id}", name="quote_show", methods={"GET"})
+     * @Route("/quote/{id}", name="quote_show", methods={"GET"})
      */
     public function show(Quote $quote): Response
     {
@@ -59,7 +67,7 @@ class QuoteController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="quote_edit", methods={"GET","POST"})
+     * @Route("/quote/{id}/edit", name="quote_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Quote $quote): Response
     {
@@ -79,7 +87,7 @@ class QuoteController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="quote_delete", methods={"DELETE"})
+     * @Route("/quote/{id}", name="quote_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Quote $quote): Response
     {
